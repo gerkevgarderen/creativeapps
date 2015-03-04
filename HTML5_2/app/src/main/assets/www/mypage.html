@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width; user-scalable=0;" />
+    <title>My HTML</title>
+    <script type="text/javascript" src="js/p5.min.js"></script>
+</head>
+<body style="margin:0; padding: 0">
+
+    <script type="text/javascript">
+
+        // variables
+        // --------------------------------------------------------------------
+        var acceleration = {x: 0, y: 0, z: 0};
+        var energy = {x: 0, y: 0, z: 0};
+
+
+        // P5.js (http://p5js.org/reference/)
+        // --------------------------------------------------------------------
+
+        function setup() {
+            createCanvas(windowWidth, windowHeight);
+            rectMode(CENTER);
+        }
+
+        function draw() {
+            background(200, 160, 180);
+            rect(width/2 + 40 * Math.sin(frameCount/1.) * energy.x, height/2 + 40 * Math.sin(frameCount/1.1) * energy.y, 30 + 20 * Math.sin(frameCount/1.) * energy.z, 30 + 20 * Math.sin(frameCount/1.) * energy.z);
+        }
+
+
+        // setup
+        // --------------------------------------------------------------------
+        if (window.DeviceMotionEvent == undefined) {
+            // output message if accelerometer is not accessible
+            alert("no accelerometer");
+        }
+        else {
+            // associate 'devicemotion' event with event handler
+            window.addEventListener("devicemotion", accelerometerUpdate, true);
+        }
+
+        // event handler
+        // --------------------------------------------------------------------
+        function accelerometerUpdate(e) {
+
+            // compare previous values to current value
+            if(acceleration.x != event.accelerationIncludingGravity.x*1 ||
+               acceleration.y != event.accelerationIncludingGravity.y*1 ||
+               acceleration.z != event.accelerationIncludingGravity.z*1) {
+                acceleration.x = event.accelerationIncludingGravity.x*1;
+                acceleration.y = event.accelerationIncludingGravity.y*1;
+                acceleration.z = event.accelerationIncludingGravity.z*1;
+                energy.x = event.accelerationIncludingGravity.x*1;
+                energy.y = event.accelerationIncludingGravity.y*1;
+                energy.z = event.accelerationIncludingGravity.z*1;
+            }
+
+            // decrease energy by factor
+            energy.x = energy.x * 0.96;
+            energy.y = energy.y * 0.97;
+            energy.z = energy.z * 0.98;
+
+            // assign new energy value to HTML elements for 'visualization'
+            document.getElementById('accX').innerHTML = round(energy.x, 2);
+            document.getElementById('accY').innerHTML = round(energy.y, 2);
+            document.getElementById('accZ').innerHTML = round(energy.z, 2);
+
+            // The following two lines are just to calculate a tilt. Not really needed.
+            // xPosition = Math.atan2(aY, aZ);
+            // yPosition = Math.atan2(aX, aZ);
+        }
+
+
+        function round(value, decimals) {
+            var n = Number(Math.round(value+'e'+decimals)+'e-'+decimals)
+            return isNaN(n) ? 0 : n;
+        }
+
+    </script>
+</body>
+</html>
