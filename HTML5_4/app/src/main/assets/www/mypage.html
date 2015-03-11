@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width; user-scalable=0;" />
+    <title>My HTML</title>
+    <script type="text/javascript" src="js/p5.min.js"></script>
+    <script type="text/javascript" src="js/oocsi-web.min.js"></script>
+</head>
+<body style="margin:0; padding: 0">
+
+    <script type="text/javascript">
+
+        // variables
+        // --------------------------------------------------------------------
+        var color = {r: 100, g: 100, b: 200};
+
+
+        // P5.js (http://p5js.org/reference/)
+        // --------------------------------------------------------------------
+
+        function setup() {
+            createCanvas(windowWidth, windowHeight);
+        }
+
+        function draw() {
+            background(color.r, color.g, color.b);
+            rect(10 + frameCounter, 10, 10, 10);
+        }
+
+        function freshColor(color) {
+            color.r = color;
+        }
+
+
+        // setup
+        // --------------------------------------------------------------------
+
+		OOCSI.connect("ws://131.155.174.87:9000/", "master2");
+		OOCSI.subscribe("colorChange", function(e) { freshColor(e.data.red)});
+
+    </script>
+</body>
+</html>
